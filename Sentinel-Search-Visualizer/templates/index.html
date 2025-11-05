@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel Search Demo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="card-container">
+        <header>
+            <h1>Sentinel Search Visualizer</h1>
+            <p class="subtitle">Enter your array and key to see the search steps.</p>
+        </header>
+
+        {% if error %}
+        <div class="error-message">
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+
+        <form action="/search" method="post" class="search-form">
+            <div class="input-group">
+                <label for="array">Enter Array (comma-separated):</label>
+                <input type="text" id="array" name="array" placeholder="e.g. 5, 3, 8, 6, 2" required>
+            </div>
+
+            <div class="input-group">
+                <label for="key">Enter Key to Search:</label>
+                <input type="number" id="key" name="key" placeholder="e.g. 6" required>
+            </div>
+
+            <button type="submit" class="submit-button">Run Sentinel Search</button>
+        </form>
+        
+        <br>
+        <div class="algorithm-link-container">
+            <a href="{{ url_for('algorithm') }}" class="view-algorithm-button">View Algorithm</a>
+        </div>
+        </div>
+</body>
+</html>

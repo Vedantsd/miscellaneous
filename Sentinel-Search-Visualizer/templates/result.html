@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel Search Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="card-container">
+        <header>
+            <h1>Sentinel Search — Step by Step</h1>
+        </header>
+
+        <div class="summary">
+            <p><strong>Array:</strong> <span>{{ array }}</span></p>
+            <p><strong>Key Searched:</strong> <span>{{ key }}</span></p>
+        </div>
+        
+        <div class="steps-section">
+            <h3>Execution Steps</h3>
+            <div class="steps-list">
+                {% for step in steps %}
+                    <p class="step-item">{{ step }}</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <h2 class="final-result">{{ result }}</h2>
+
+        <a href="/" class="back-link">Try Another Search</a>
+    </div>
+</body>
+</html>

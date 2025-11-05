@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel Search Algorithm</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="card-container">
+        <header>
+            <h1>Sentinel Search Algorithm</h1>
+            <p class="subtitle">Understand how the optimization works.</p>
+        </header>
+
+        <div class="algorithm-steps-section">
+            <h3>How Sentinel Search Works</h3>
+            <div class="algorithm-description">
+                <p><strong>Step 1:</strong> Input the array and key from user</p>
+                <p><strong>Step 2:</strong> Store the last element of array in a 'last' variable</p>
+                <p><strong>Step 3:</strong> Put the key at the end of the array</p>
+                <p><strong>Step 4:</strong> Now, it's guaranteed to get a result!</p>
+                <p><strong>Step 5:</strong> Iterate through the loop to find the key</p>
+                <p><strong>Step 6:</strong> If the result index is less than n, then the key exists in the array!</p>
+                <p><strong>Step 7:</strong> If the result index is equal to n, then check equality of key and last</p>
+                <p><strong>Step 8:</strong> If key == last, key exists, else, return "Key not found"</p>
+                <p>The core idea is to save an <b>if-condition check</b> inside the loop.</p>
+            </div>
+        </div>
+
+        <div class="program-code-section">
+            <h3>Program Implementation</h3>
+            <div class="code-display">
+                <pre>
+def sentinel_search(arr, key):
+    last_element = arr[-1] 
+    
+    arr[-1] = key 
+    
+    i = 0
+
+    while arr[i] != key:
+        i += 1
+        
+    arr[-1] = last_element
+    
+    if i < len(arr) - 1 or last_element == key:
+        return i  # Key found at index i
+    else:
+        return -1 
+                </pre>
+            </div>
+        </div>
+
+        <a href="/" class="back-link">Back to Demo</a>
+    </div>
+</body>
+</html>
