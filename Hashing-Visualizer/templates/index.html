@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HashMap Visualizer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <div class="block input-block">
+        <h2>HashMap Operations</h2>
+        <div class="button-group">
+            <button class="op-btn" id="insert-btn">Insert</button>
+            <button class="op-btn" id="search-btn">Search</button>
+            <button class="op-btn" id="delete-btn">Delete</button>
+        </div>
+
+        <div id="input-fields">
+        </div>
+
+        <button id="submit-btn">Execute</button>
+        <p id="message"></p>
+    </div>
+
+    <div class="block output-block">
+        <h2>HashMap Visual</h2>
+        <div id="hashmap-display"></div>
+    </div>
+</div>
+
+<script>
+let currentOperation = "insert";
+
+document.addEventListener("DOMContentLoaded", () => {
+    setOperation("insert");
+
+    document.getElementById("insert-btn").addEventListener("click", () => setOperation("insert"));
+    document.getElementById("search-btn").addEventListener("click", () => setOperation("search"));
+    document.getElementById("delete-btn").addEventListener("click", () => setOperation("delete"));
+    document.getElementById("submit-btn").addEventListener("click", performOperation);
+});
+
+function setOperation(op) {
+    currentOperation = op;
+    document.querySelectorAll(".op-btn").forEach(btn => btn.classList.remove("active"));
+    document.getElementById(op + "-btn").classList.add("active");
+
+    const inputDiv = document.getElementById("input-fields");
+    inputDiv.innerHTML = "";
+
+    if (op === "insert") {
+        inputDiv.innerHTML = `
+            <input type="text" id="key" placeholder="Enter key" required>
+            <input type="text" id="value" placeholder="Enter value" required>
+        `;
+    } else if (op === "search" || op === "delete") {
+        inputDiv.innerHTML = `<input type="text" id="key" placeholder="Enter key" required>`;
+    }
+}
+
+async function performOperation() {
+    const keyInput = document.getElementById("key");
+    const valueInput = document.getElementById("value");
+    
+    const key = keyInput?.value.trim() || "";
+    const value = valueInput?.value.trim() || "";
+
+    if (!key) {
+        document.getElementById("message").textContent = "Please enter a key!";
+        document.getElementById("message").style.background = "linear-gradient(135deg, #ffcccb 0%, #ff9999 100%)";
+        document.getElementById("message").style.borderLeftColor = "#e74c3c";
+        return;
+    }
+
+    if (currentOperation === "insert" && !value) {
+        document.getElementById("message").textContent = "Please enter a value!";
+        document.getElementById("message").style.background = "linear-gradient(135deg, #ffcccb 0%, #ff9999 100%)";
+        document.getElementById("message").style.borderLeftColor = "#e74c3c";
+        return;
+    }
+
+    const response = await fetch("/operate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ operation: currentOperation, key, value })
+    });
+
+    const data = await response.json();
+    console.log("Response data:", data);
+    console.log("HashMap:", data.hashmap);
+    
+    const messageEl = document.getElementById("message");
+    messageEl.textContent = data.message;
+    messageEl.style.background = "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)";
+    messageEl.style.borderLeftColor = "#667eea";
+    renderHashMap(data.hashmap);
+}
+
+function renderHashMap(map) {
+    const container = document.getElementById("hashmap-display");
+    container.innerHTML = "";
+
+    if (Object.keys(map).length === 0) {
+        container.innerHTML = "<p class='empty'>HashMap is empty</p>";
+        return;
+    }
+
+    for (const [key, values] of Object.entries(map)) {
+        const row = document.createElement("div");
+        row.classList.add("hashmap-row");
+        const valuesHTML = values.map(v => `<span class='value'>${v}</span>`).join(" ");
+        row.innerHTML = `<span class='key'>${key}</span> → ${valuesHTML}`;
+        container.appendChild(row);
+    }
+}
+</script>
+</body>
+</html>
